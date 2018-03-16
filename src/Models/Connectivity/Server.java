@@ -1,6 +1,8 @@
 package Models.Connectivity;
 
+import Login.LoginController;
 import Models.GameBoard.GameBoard;
+import javafx.application.Platform;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -21,6 +23,7 @@ public class Server {
     private boolean loop = true;
     private boolean isConnectionAccepted = false;
 
+    private LoginController loginController;
     private GameBoard gameBoard;
 
     public Server() {
@@ -53,13 +56,17 @@ public class Server {
             outputStream = new DataOutputStream(socket.getOutputStream());
             inputStream = new DataInputStream(socket.getInputStream());
             isConnectionAccepted = true;
+
+            loginController.initializeGameUI();
+            System.out.println("Successfully connected to the server.");
         }
         catch (IOException e) {
             System.out.println("Unable to connect to the address: " + IP + ":" + port + " | Starting a server");
             return false;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        System.out.println("Successfully connected to the server.");
         return true;
     }
 
@@ -71,10 +78,26 @@ public class Server {
             outputStream = new DataOutputStream(socket.getOutputStream());
             inputStream = new DataInputStream(socket.getInputStream());
             isConnectionAccepted = true;
+
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        loginController.initializeGameUI();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
             System.out.println("CLIENT HAS REQUESTED TO JOIN, AND WE HAVE ACCEPTED");
         }
         catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void SetLoginController(LoginController loginController) {
+        this.loginController = loginController;
     }
 }
