@@ -18,6 +18,9 @@ import java.net.URL;
 import java.util.*;
 import java.util.List;
 
+import static Login.LoginController.IsAIMode;
+import static Login.LoginController.IsLANMode;
+
 public class GameController implements Initializable
 {
     @FXML
@@ -208,7 +211,10 @@ public class GameController implements Initializable
                                 AIShipsGridpane.setDisable(true);
                         }
 
-                        tryToShotPlayerShips();
+                        if (IsAIMode)
+                            tryToShotPlayerShips();
+                        //else if (IsLANMode)
+
                     }
                 });
 

@@ -12,7 +12,7 @@
    <children>
       <Button id="validateButton" fx:id="" layoutX="780.0" layoutY="478.0" mnemonicParsing="false" onAction="#handleSubmitButtonAction" prefHeight="40.0" prefWidth="95.0" text="Valider" />
       <Label layoutX="76.0" layoutY="403.0" text="Choix du pseudo :" />
-      <RadioButton fx:id="AIModeRadioButton" layoutX="444.0" layoutY="434.0" mnemonicParsing="false" text="Contre l'IA" />
+      <RadioButton fx:id="AIModeRadioButton" layoutX="444.0" layoutY="434.0" mnemonicParsing="false" selected="true" text="Contre l'IA" />
       <RadioButton fx:id="playerModeRadioButton" layoutX="444.0" layoutY="455.0" mnemonicParsing="false" text="Contre un joueur en LAN" />
       <Label layoutX="443.0" layoutY="409.0" text="Choix du mode :" />
       <TextField fx:id="pseudoTextField" layoutX="76.0" layoutY="422.0" promptText="Exemple" />
@@ -21,5 +21,6 @@
             <Image url="@../Resources/Images/login_screen.png" />
          </image>
       </ImageView>
+      <Label fx:id="connectionStatusLabel" text="Label" layoutX="444.0" layoutY="488.0" visible="false" />
    </children>
 </AnchorPane>

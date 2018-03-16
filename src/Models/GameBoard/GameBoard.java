@@ -8,6 +8,8 @@ import java.util.List;
 public class GameBoard {
     private String playerPseudo;
 
+    private boolean isYourTurn;
+
     private int playerShipsTotalLife = 17;
     private int AIShipsTotalLife = 17;
 
@@ -26,6 +28,14 @@ public class GameBoard {
 
     public String GetPlayerPseudo() {
         return playerPseudo;
+    }
+
+    public void SetIsYourTurn(boolean isYourTurn) {
+        this.isYourTurn = isYourTurn;
+    }
+
+    public boolean GetIsYourTurn() {
+        return isYourTurn;
     }
 
     public void SetPlayerShipsTotalLife(int totalLife) {
