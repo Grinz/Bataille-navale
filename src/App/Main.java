@@ -15,7 +15,7 @@ public class Main extends Application
     {
         this.loginStage = loginStage;
 
-        Parent root = FXMLLoader.load(getClass().getResource("/Login/Login.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/Login/Home/Login.fxml"));
         loginStage.setTitle("Battleship - Login");
         loginStage.setScene(new Scene(root, 888, 531));
         loginStage.show();

@@ -1,8 +1,9 @@
-package Login;
+package Login.Home;
 
 import App.Main;
 import Models.Connectivity.Server;
 import Models.GameBoard.GameBoard;
+import Models.Threads.ConnectionThread;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,7 +18,7 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class LoginController implements Initializable, Runnable
+public class LoginController implements Initializable
 {
     @FXML
     private TextField pseudoTextField;
@@ -28,18 +29,15 @@ public class LoginController implements Initializable, Runnable
     @FXML
     private Label connectionStatusLabel;
 
-    private GameBoard gameBoard;
-    private Server server;
-    private Thread threadServer;
+    public static Server server;
+    private ConnectionThread connectionThread;
 
     public static boolean IsAIMode;
     public static boolean IsLANMode;
-
-    public static Stage gameStage;
+    public static GameBoard gameBoard = new GameBoard();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
         ToggleGroup toggleGroup = new ToggleGroup();
         AIModeRadioButton.setToggleGroup(toggleGroup);
         playerModeRadioButton.setToggleGroup(toggleGroup);
@@ -70,32 +68,31 @@ public class LoginController implements Initializable, Runnable
                 if (!server.IsConnected())
                     server.InitializeServer(22222, "localhost");
 
-                threadServer = new Thread(this, "Battleship connection");
-                threadServer.start();
+                connectionThread = new ConnectionThread("Battleship connection thread");
+                connectionThread.start();
             }
         }
     }
 
     public void initializeGameUI() throws Exception {
-        gameBoard = new GameBoard();
         gameBoard.SetPlayerPseudo(pseudoTextField.getText());
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Game/Game.fxml"));
         Parent root = (Parent) fxmlLoader.load();
+
         Stage gameStage = new Stage();
-        this.gameStage = gameStage;
         gameStage.setScene(new Scene(root));
-
         gameStage.show();
-        Main.loginStage.close();
-    }
 
-    public void run() {
-        while (true) {
-            if (!server.GetIsConnectionAccepted() && !server.GetLoop()) {
-                System.out.println("Thread");
-                server.ListenForServerRequest();
-            }
+        if (IsLANMode) {
+            fxmlLoader = new FXMLLoader(getClass().getResource("/Chat/Chat.fxml"));
+            root = (Parent) fxmlLoader.load();
+
+            Stage chatStage = new Stage();
+            chatStage.setScene(new Scene(root));
+            chatStage.show();
         }
+
+        Main.loginStage.close();
     }
 }

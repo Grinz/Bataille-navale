@@ -1,15 +1,14 @@
 package Models.Connectivity;
 
-import Login.LoginController;
-import Models.GameBoard.GameBoard;
+import Login.Home.LoginController;
 import javafx.application.Platform;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import static Login.Home.LoginController.gameBoard;
 
 public class Server {
     private ServerSocket serverSocket;
@@ -17,14 +16,13 @@ public class Server {
     private int port = 22222;
 
     private Socket socket;
-    private DataOutputStream outputStream;
-    private DataInputStream inputStream;
+    private ObjectOutputStream outputStream;
+    private ObjectInputStream inputStream;
 
     private boolean loop = true;
     private boolean isConnectionAccepted = false;
 
     private LoginController loginController;
-    private GameBoard gameBoard;
 
     public Server() {
     }
@@ -37,6 +35,14 @@ public class Server {
         return loop;
     }
 
+    public ObjectOutputStream GetOutputStream() {
+        return outputStream;
+    }
+
+    public ObjectInputStream GetInputStream() {
+        return inputStream;
+    }
+
     public void InitializeServer(int port, String IP) {
         try {
             serverSocket = new ServerSocket(port, 8, InetAddress.getByName(IP));
@@ -44,17 +50,15 @@ public class Server {
             e.printStackTrace();
         }
 
-        gameBoard = new GameBoard();
         gameBoard.SetIsYourTurn(true);
-
         loop = false;
     }
 
     public boolean IsConnected() {
         try {
             socket = new Socket(IP, port);
-            outputStream = new DataOutputStream(socket.getOutputStream());
-            inputStream = new DataInputStream(socket.getInputStream());
+            outputStream = new ObjectOutputStream(socket.getOutputStream());
+            inputStream = new ObjectInputStream(socket.getInputStream());
             isConnectionAccepted = true;
 
             loginController.initializeGameUI();
@@ -75,8 +79,8 @@ public class Server {
         try {
             socket = serverSocket.accept();
             System.out.println("Socket accepted !");
-            outputStream = new DataOutputStream(socket.getOutputStream());
-            inputStream = new DataInputStream(socket.getInputStream());
+            outputStream = new ObjectOutputStream(socket.getOutputStream());
+            inputStream = new ObjectInputStream(socket.getInputStream());
             isConnectionAccepted = true;
 
             Platform.runLater(new Runnable() {

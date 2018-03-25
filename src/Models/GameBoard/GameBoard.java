@@ -1,23 +1,29 @@
 package Models.GameBoard;
 
 import Models.Ships.*;
+import javafx.scene.control.Button;
+import javafx.scene.layout.GridPane;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
-public class GameBoard {
+public class GameBoard implements Serializable {
     private String playerPseudo;
 
     private boolean isYourTurn;
 
     private int playerShipsTotalLife = 17;
-    private int AIShipsTotalLife = 17;
+    private int ennemyShipsTotalLife = 17;
 
     private List<Ship> playerGameShips = Arrays.asList(new AircraftCarrier(5, 0, 0, "", 5), new CounterTorpedo(3, 0, 0, "", 3),
             new Cruiser(4, 0, 0, "",4), new Submarine(3, 0, 0,"", 3), new Torpedo(2, 0, 0,"", 2));
 
-    private List<Ship> AIGameShips = Arrays.asList(new AircraftCarrier(5, 0,0, "",5), new CounterTorpedo(3, 0, 0, "",3),
+    private List<Ship> ennemyGameShips = Arrays.asList(new AircraftCarrier(5, 0,0, "",5), new CounterTorpedo(3, 0, 0, "",3),
             new Cruiser(4, 0, 0, "", 4), new Submarine(3, 0, 0, "",3), new Torpedo(2, 0, 0, "",2));
+
+    private String[][] playerShipsButtonsArray = new String[10][10];
+    private String[][] ennemyShipsButtonsArray = new String[10][10];
 
     public GameBoard() {
     }
@@ -46,44 +52,60 @@ public class GameBoard {
         return playerShipsTotalLife;
     }
 
-    public void SetAIShipsTotalLife(int totalLife) {
-        this.AIShipsTotalLife = totalLife;
+    public void SetEnnemyShipsTotalLife(int totalLife) {
+        this.ennemyShipsTotalLife = totalLife;
     }
 
-    public int GetAIShipsTotalLife() {
-        return AIShipsTotalLife;
+    public int GetEnnemyShipsTotalLife() {
+        return ennemyShipsTotalLife;
     }
 
     public List<Ship> GetPlayerGameShips() {
         return playerGameShips;
     }
 
-    public List<Ship> GetAIGameShips() {
-        return AIGameShips;
+    public List<Ship> GetEnnemyGameShips() {
+        return ennemyGameShips;
+    }
+
+    public void SetPlayerShipsButtons(String[][] playerShipsButtonsArray) {
+        this.playerShipsButtonsArray = playerShipsButtonsArray;
+    }
+
+    public String[][] GetPlayerShipsButtons() {
+        return playerShipsButtonsArray;
+    }
+
+    public void SetEnnemyShipsButtons(String[][] ennemyShipsButtonsArray) {
+        this.ennemyShipsButtonsArray = ennemyShipsButtonsArray;
+    }
+
+    public String[][] GetEnnemyShipsButtons() {
+        return ennemyShipsButtonsArray;
     }
 
     public void ShotEnnemyShip(String shipType, int row, int column) {
         switch (shipType) {
             case "AC":
-                AIGameShips.get(0).SetLife(AIGameShips.get(0).GetLife()-1);
+                ennemyGameShips.get(0).SetLife(ennemyGameShips.get(0).GetLife()-1);
                 break;
             case "CT":
-                AIGameShips.get(1).SetLife(AIGameShips.get(1).GetLife()-1);
+                ennemyGameShips.get(1).SetLife(ennemyGameShips.get(1).GetLife()-1);
                 break;
             case "C":
-                AIGameShips.get(2).SetLife(AIGameShips.get(2).GetLife()-1);
+                ennemyGameShips.get(2).SetLife(ennemyGameShips.get(2).GetLife()-1);
                 break;
             case "S":
-                AIGameShips.get(3).SetLife(AIGameShips.get(3).GetLife()-1);
+                ennemyGameShips.get(3).SetLife(ennemyGameShips.get(3).GetLife()-1);
                 break;
             case "T":
-                AIGameShips.get(4).SetLife(AIGameShips.get(4).GetLife()-1);
+                ennemyGameShips.get(4).SetLife(ennemyGameShips.get(4).GetLife()-1);
                 break;
             default:
                 break;
         }
 
-        AIShipsTotalLife -= 1;
+        ennemyShipsTotalLife -= 1;
     }
 
     public void ShotPlayerShip(String shipType, int row, int column) {
